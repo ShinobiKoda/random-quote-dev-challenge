@@ -106,3 +106,19 @@ main {
   font-size: 1.45rem;
   text-align: center;
 }
+
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.toast.show {
+  opacity: 1;
+}

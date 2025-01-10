@@ -6,6 +6,7 @@ const quote_text = document.getElementById("quote");
 const get_quote = document.getElementById("get-quote");
 const share_button = document.getElementById("share");
 const categories_container = document.getElementById("categories");
+const toast = document.getElementById("toast");
 
 const fetchQuote = async () => {
   try {
@@ -21,6 +22,7 @@ const fetchQuote = async () => {
     }
 
     const data = await response.json();
+    console.log(data);
     return data; // Returns the fetched data
   } catch (err) {
     console.error("Fetch Error:", err.message);
@@ -36,22 +38,50 @@ const displayCategories = (categories) => {
   });
 };
 
+const showToast = (message) => {
+  toast.innerText = message;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+};
+
+const initializeQuote = async () => {
+  try {
+    const data = await fetchQuote();
+    if (data && data.length > 0) {
+      quote_author.innerText = data[0].author || "Unknown Author";
+      quote_text.innerText = `"${data[0].quote || "No quote available."}"`;
+      displayCategories(data[0].categories || []);
+    } else {
+      quote_author.innerText = "Error";
+      quote_text.innerText = "\"No quote found.\"";
+      categories_container.innerHTML = "";
+    }
+  } catch (err) {
+    console.error("Error in initialization:", err.message);
+    quote_author.innerText = "Error";
+    quote_text.innerText = "\"Failed to fetch quote.\"";
+    categories_container.innerHTML = "";
+  }
+};
+
 get_quote.addEventListener("click", async () => {
   try {
     const data = await fetchQuote();
     if (data && data.length > 0) {
       quote_author.innerText = data[0].author || "Unknown Author";
-      quote_text.innerText = data[0].quote || "No quote available.";
+      quote_text.innerText = `"${data[0].quote || "No quote available."}"`;
       displayCategories(data[0].categories || []);
     } else {
       quote_author.innerText = "Error";
-      quote_text.innerText = "No quote found.";
+      quote_text.innerText = "\"No quote found.\"";
       categories_container.innerHTML = "";
     }
   } catch (err) {
     console.error("Error in event listener:", err.message);
     quote_author.innerText = "Error";
-    quote_text.innerText = "Failed to fetch quote.";
+    quote_text.innerText = "\"Failed to fetch quote.\"";
     categories_container.innerHTML = "";
   }
 });
@@ -59,14 +89,16 @@ get_quote.addEventListener("click", async () => {
 share_button.addEventListener("click", () => {
   const quote = quote_text.innerText;
   const author = quote_author.innerText;
-  const textToCopy = `"${quote}" - ${author}`;
+  const textToCopy = `${quote} - ${author}`;
 
   navigator.clipboard
     .writeText(textToCopy)
     .then(() => {
-      alert("Quote copied to clipboard!");
+      showToast("Quote copied to clipboard!");
     })
     .catch((err) => {
       console.error("Failed to copy text: ", err);
     });
 });
+
+window.addEventListener("load", initializeQuote);
