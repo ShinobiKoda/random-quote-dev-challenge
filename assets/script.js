@@ -52,7 +52,7 @@ const initializeQuote = async () => {
     if (data && data.length > 0) {
       quote_author.innerText = data[0].author || "Unknown Author";
       quote_text.innerText = `"${data[0].quote || "No quote available."}"`;
-      displayCategories(data[0].categories || []);
+      displayCategories(data[0].category ? [data[0].category] : []);
     } else {
       quote_author.innerText = "Error";
       quote_text.innerText = "\"No quote found.\"";
@@ -72,7 +72,7 @@ get_quote.addEventListener("click", async () => {
     if (data && data.length > 0) {
       quote_author.innerText = data[0].author || "Unknown Author";
       quote_text.innerText = `"${data[0].quote || "No quote available."}"`;
-      displayCategories(data[0].categories || []);
+      displayCategories(data[0].category ? [data[0].category] : []);
     } else {
       quote_author.innerText = "Error";
       quote_text.innerText = "\"No quote found.\"";

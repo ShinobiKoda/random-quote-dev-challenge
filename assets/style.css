@@ -91,6 +91,7 @@ main {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap; /* Ensure categories wrap if they overflow */
 }
 
 .category button {
@@ -100,6 +101,7 @@ main {
   border-radius: 0.8rem;
   color: white;
   padding: 0.5rem 0.5rem;
+  cursor: pointer;
 }
 
 .quote {
